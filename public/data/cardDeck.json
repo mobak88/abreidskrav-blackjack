@@ -1,43 +1,212 @@
 {
   "cards": [
     {
-      "two": 2
+      "name": "two heart",
+      "value": 2
     },
     {
-      "three": 3
+      "name": "two clover",
+      "value": 2
     },
     {
-      "four": 4
+      "name": "two spade",
+      "value": 2
     },
     {
-      "five": 5
+      "name": "two diamond",
+      "value": 2
     },
     {
-      "six": 7
+      "name": "three heart",
+      "value": 3
     },
     {
-      "seven": 7
+      "name": "three clover",
+      "value": 3
     },
     {
-      "eight": 8
+      "name": "three spade",
+      "value": 3
     },
     {
-      "nine": 9
+      "name": "three diamond",
+      "value": 3
     },
     {
-      "ten": 10
+      "name": "four heart",
+      "value": 4
     },
     {
-      "jack": 10
+      "name": "four clover",
+      "value": 4
     },
     {
-      "Queen": 10
+      "name": "four spade",
+      "value": 4
     },
     {
-      "King": 10
+      "name": "four diamond",
+      "value": 4
     },
     {
-      "Ace": [1, 11]
+      "name": "five heart",
+      "value": 5
+    },
+    {
+      "name": "five clover",
+      "value": 5
+    },
+    {
+      "name": "five spade",
+      "value": 5
+    },
+    {
+      "name": "five diamond",
+      "value": 5
+    },
+    {
+      "name": "six heart",
+      "value": 6
+    },
+    {
+      "name": "six clover",
+      "value": 6
+    },
+    {
+      "name": "six spade",
+      "value": 6
+    },
+    {
+      "name": "six diamond",
+      "value": 6
+    },
+    {
+      "name": "seven heart",
+      "value": 7
+    },
+    {
+      "name": "seven clover",
+      "value": 7
+    },
+    {
+      "name": "seven spade",
+      "value": 7
+    },
+    {
+      "name": "seven diamond",
+      "value": 7
+    },
+    {
+      "name": "eight heart",
+      "value": 8
+    },
+    {
+      "name": "eight clover",
+      "value": 8
+    },
+    {
+      "name": "eight spade",
+      "value": 8
+    },
+    {
+      "name": "eight diamond",
+      "value": 8
+    },
+    {
+      "name": "nine heart",
+      "value": 9
+    },
+    {
+      "name": "nine clover",
+      "value": 9
+    },
+    {
+      "name": "nine spade",
+      "value": 9
+    },
+    {
+      "name": "nine diamond",
+      "value": 9
+    },
+    {
+      "name": "ten heart",
+      "value": 10
+    },
+    {
+      "name": "ten clover",
+      "value": 10
+    },
+    {
+      "name": "ten spade",
+      "value": 10
+    },
+    {
+      "name": "ten diamond",
+      "value": 10
+    },
+    {
+      "name": "jack heart",
+      "value": 10
+    },
+    {
+      "name": "jack clover",
+      "value": 10
+    },
+    {
+      "name": "jack spade",
+      "value": 10
+    },
+    {
+      "name": "jack diamond",
+      "value": 10
+    },
+    {
+      "name": "queen heart",
+      "value": 10
+    },
+    {
+      "name": "queen clover",
+      "value": 10
+    },
+    {
+      "name": "queen spade",
+      "value": 10
+    },
+    {
+      "name": "queen diamond",
+      "value": 10
+    },
+    {
+      "name": "king heart",
+      "value": 10
+    },
+    {
+      "name": "king clover",
+      "value": 10
+    },
+    {
+      "name": "king spade",
+      "value": 10
+    },
+    {
+      "name": "king diamond",
+      "value": 10
+    },
+    {
+      "name": "ace heart",
+      "value": 11
+    },
+    {
+      "name": "ace clover",
+      "value": 11
+    },
+    {
+      "name": "ace spade",
+      "value": 11
+    },
+    {
+      "name": "ace diamond",
+      "value": 11
     }
   ]
 }

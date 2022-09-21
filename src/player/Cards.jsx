@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from "react";
+import generateRandomCard from "../helpers/generateRandCard";
 
 const Cards = () => {
   const [randCard, setRandCard] = useState(null);
-
-  function generateRandomCard(card) {
-    const randNumber = Math.round(Math.random() * (card.length - 1));
-    return randNumber;
-  }
+  const [cardDeck, setCardDeck] = useState(null);
 
   useEffect(() => {
     const getCardDeck = async () => {
       await fetch("data/cardDeck.json")
         .then((res) => res.json())
         .then((data) => {
-          setRandCard(generateRandomCard(data.cards));
-          console.log(data.cards, randCard);
+          setCardDeck([...data.cards]);
         });
     };
 
     getCardDeck();
-  });
+  }, []);
+
+  useEffect(() => {
+    console.log(cardDeck);
+    if (cardDeck !== null) {
+      const randNum = generateRandomCard(cardDeck);
+      console.log(cardDeck, cardDeck[randNum], randNum);
+      setRandCard(cardDeck[randNum].value);
+    }
+  }, [cardDeck]);
 
   return (
     <div>
