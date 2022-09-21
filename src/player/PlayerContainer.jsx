@@ -1,4 +1,5 @@
 import React from "react";
+import Cards from "./Cards";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -8,8 +9,15 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-const PlayerContainer = ({ children }) => {
-  return <Container>{children}</Container>;
+/* Pass carddeck, randcard down to cards */
+
+const PlayerContainer = () => {
+  return (
+    <Container>
+      <Cards />
+      <Cards />
+    </Container>
+  );
 };
 
 export default PlayerContainer;

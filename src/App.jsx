@@ -6,11 +6,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <PlayerContainer>
-        <h1>Test</h1>
-        <h2>Test2</h2>
-        <Cards />
-      </PlayerContainer>
+      <PlayerContainer />
     </>
   );
 }
