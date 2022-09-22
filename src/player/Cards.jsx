@@ -19,7 +19,7 @@ const CardWrapper = styled.div`
   padding: 1rem;
 `;
 
-const Cards = ({ cardDeck, getRandCard }) => {
+const Cards = ({ cardDeck, getRandCard, initialCards }) => {
   const [dealtCards, setDealtCards] = useState([]);
   const [score, setscore] = useState(0);
 
@@ -41,6 +41,11 @@ const Cards = ({ cardDeck, getRandCard }) => {
   const getRandCardHandler = (card) => {
     getRandCard(card);
   };
+
+  useEffect(() => {
+    console.log(initialCards);
+    setDealtCards((prevState) => [...prevState, ...initialCards]);
+  }, [initialCards]);
 
   return (
     <CardsContainer>
