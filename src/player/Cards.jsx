@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import generateRandomCard from "../helpers/generateRandCard";
-import useFetch from "../hooks/useFetch";
 import styled from "styled-components";
 
 const CardsContainer = styled.div`
@@ -20,37 +19,15 @@ const CardWrapper = styled.div`
   padding: 1rem;
 `;
 
-const Cards = () => {
-  const [randCard, setRandCard] = useState(null);
-  const [cardDeck, setCardDeck] = useState(null);
+const Cards = ({ cardDeck, getRandCard }) => {
   const [dealtCards, setDealtCards] = useState([]);
   const [score, setscore] = useState(0);
 
-  const { loading, err, data } = useFetch("data/cardDeck.json");
-
-  useEffect(() => {
-    if (data) {
-      setCardDeck([...data.cards]);
-    }
-  }, [data]);
-
   const dealNewCard = () => {
     const randNum = generateRandomCard(cardDeck);
-    setRandCard(cardDeck[randNum]);
+    setDealtCards((prevState) => [...prevState, cardDeck[randNum]]);
+    getRandCardHandler(cardDeck[randNum]);
   };
-
-  useEffect(() => {
-    if (randCard) {
-      setCardDeck((prevState) => {
-        const newCardDeck = prevState.filter(
-          (card) => card.name !== randCard.name
-        );
-        return newCardDeck;
-      });
-
-      setDealtCards((prevState) => [...prevState, randCard]);
-    }
-  }, [randCard]);
 
   useEffect(() => {
     if (dealtCards.length !== 0) {
@@ -58,12 +35,12 @@ const Cards = () => {
         return prevVal + currentVal.value;
       }, 0);
       setscore(newScore);
-      console.log(newScore);
     }
-    console.log(dealtCards);
   }, [dealtCards]);
 
-  console.log(dealtCards.length);
+  const getRandCardHandler = (card) => {
+    getRandCard(card);
+  };
 
   return (
     <CardsContainer>
