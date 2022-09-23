@@ -36,6 +36,13 @@ const PlayerContainer = () => {
     }
   }, [data]);
 
+  const removeCardFromDeck = (i) => {
+    setCardDeck((prevState) => {
+      const newCardDeck = prevState.filter((card) => card !== cardDeck[i]);
+      return newCardDeck;
+    });
+  };
+
   const dealInitialCards = () => {
     for (let i = 0; i <= 3; i++) {
       const randNum = generateRandomCard(cardDeck);
@@ -43,21 +50,11 @@ const PlayerContainer = () => {
       if (i % 2 === 0) {
         setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
-        setCardDeck((prevState) => {
-          const newCardDeck = prevState.filter(
-            (card) => card !== cardDeck[randNum]
-          );
-          return newCardDeck;
-        });
+        removeCardFromDeck();
       } else {
         setPlayerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
-        setCardDeck((prevState) => {
-          const newCardDeck = prevState.filter(
-            (card) => card !== cardDeck[randNum]
-          );
-          return newCardDeck;
-        });
+        removeCardFromDeck(randNum);
       }
     }
   };
@@ -67,12 +64,7 @@ const PlayerContainer = () => {
 
     setPlayerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
-    setCardDeck((prevState) => {
-      const newCardDeck = prevState.filter(
-        (card) => card !== cardDeck[randNum]
-      );
-      return newCardDeck;
-    });
+    removeCardFromDeck(randNum);
   };
 
   const handlePlayerHold = () => {
@@ -85,12 +77,7 @@ const PlayerContainer = () => {
 
     setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
-    setCardDeck((prevState) => {
-      const newCardDeck = prevState.filter(
-        (card) => card !== cardDeck[randNum]
-      );
-      return newCardDeck;
-    });
+    removeCardFromDeck(randNum);
   };
 
   useEffect(() => {
