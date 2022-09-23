@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import generateRandomCard from "../helpers/generateRandCard";
 import styled from "styled-components";
 
 const CardsContainer = styled.div`
@@ -7,6 +6,8 @@ const CardsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  padding: 2rem;
+  background-color: #ebebeb;
 `;
 
 const DealtCardsContainer = styled.div`
@@ -19,49 +20,67 @@ const CardWrapper = styled.div`
   padding: 1rem;
 `;
 
-const Cards = ({ cardDeck, getRandCard, initialCards }) => {
+const Cards = ({
+  cards,
+  children,
+  player,
+  dealNewPlayerCard,
+  handlePlayerHold,
+  hold,
+}) => {
   const [dealtCards, setDealtCards] = useState([]);
-  const [score, setscore] = useState(0);
+  const [score, setScore] = useState(0);
 
-  const dealNewCard = () => {
-    const randNum = generateRandomCard(cardDeck);
-    setDealtCards((prevState) => [...prevState, cardDeck[randNum]]);
-    getRandCardHandler(cardDeck[randNum]);
+  const handleDealNewPlayerCard = () => {
+    dealNewPlayerCard();
+    setDealtCards((prevState) => [...prevState, ...cards]);
   };
+
+  const playerHoldHandler = () => {
+    handlePlayerHold();
+  };
+
+  useEffect(() => {
+    setDealtCards([...cards]);
+  }, [cards]);
 
   useEffect(() => {
     if (dealtCards.length !== 0) {
       const newScore = dealtCards.reduce((prevVal, currentVal) => {
         return prevVal + currentVal.value;
       }, 0);
-      setscore(newScore);
+      setScore(newScore);
     }
+    console.log(dealtCards);
   }, [dealtCards]);
 
-  const getRandCardHandler = (card) => {
-    getRandCard(card);
-  };
-
   useEffect(() => {
-    console.log(initialCards);
-    setDealtCards((prevState) => [...prevState, ...initialCards]);
-  }, [initialCards]);
+    console.log(score);
+  }, [hold]);
 
   return (
     <CardsContainer>
-      <h3>{score}</h3>
+      <h2>{children}</h2>
+      {/* {player && score < 21 && <h3>Score: {score}</h3>} */}
+      {score < 21 && <h3>Score: {score}</h3>}
+      {score > 21 && <h3>You lost Score: {score}</h3>}
+      {score === 21 && <h3>Blackjack Score: {score}</h3>}
       <DealtCardsContainer>
-        {dealtCards.length < 1 && <p>Click new card to play</p>}
         {dealtCards.length > 0 &&
           dealtCards.map((card) => {
             return (
-              <CardWrapper key={card.name}>
+              <CardWrapper key={card.name + Math.random()}>
                 <p>{card.value}</p>
               </CardWrapper>
             );
           })}
       </DealtCardsContainer>
-      <button onClick={dealNewCard}>New card</button>
+      {player && dealtCards.length > 0 && (
+        <>
+          <button onClick={handleDealNewPlayerCard}>New card</button>
+          <button onClick={playerHoldHandler}>Hold</button>
+        </>
+      )}
     </CardsContainer>
   );
 };
