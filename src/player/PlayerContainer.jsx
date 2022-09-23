@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Cards from "./Cards";
 import useFetch from "../hooks/useFetch";
 import generateRandomCard from "../helpers/generateRandCard";
-import computerLogic from "../helpers/computerLogic";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -50,7 +49,7 @@ const PlayerContainer = () => {
       if (i % 2 === 0) {
         setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
-        removeCardFromDeck();
+        removeCardFromDeck(randNum);
       } else {
         setPlayerCards((prevState) => [...prevState, cardDeck[randNum]]);
 
@@ -68,27 +67,34 @@ const PlayerContainer = () => {
   };
 
   const handlePlayerHold = () => {
-    console.log("Hold");
     setHold(true);
   };
 
   const dealNewComputerCards = () => {
-    const randNum = generateRandomCard(cardDeck);
+    let scoreArr = [...computerCards];
 
-    setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
-
-    removeCardFromDeck(randNum);
-  };
-
-  useEffect(() => {
-    const score = computerCards.reduce((prevVal, currentVal) => {
+    let score = scoreArr.reduce((prevVal, currentVal) => {
       return prevVal + currentVal.value;
     }, 0);
 
+    while (score < 15) {
+      const randNum = generateRandomCard(cardDeck);
+
+      setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
+
+      scoreArr.push(cardDeck[randNum]);
+
+      score = scoreArr.reduce((prevVal, currentVal) => {
+        return prevVal + currentVal.value;
+      }, 0);
+
+      removeCardFromDeck(randNum);
+    }
+  };
+
+  useEffect(() => {
     if (hold === true) {
-      if (score < 20) {
-        dealNewComputerCards();
-      }
+      dealNewComputerCards();
     }
   }, [hold]);
 
@@ -105,6 +111,7 @@ const PlayerContainer = () => {
           player={player}
           dealNewPlayerCard={dealNewPlayerCard}
           handlePlayerHold={handlePlayerHold}
+          hold={hold}
         >
           Player
         </Cards>

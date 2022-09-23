@@ -51,12 +51,7 @@ const Cards = ({
       }, 0);
       setScore(newScore);
     }
-    console.log(dealtCards);
   }, [dealtCards]);
-
-  useEffect(() => {
-    console.log(score);
-  }, [hold]);
 
   return (
     <CardsContainer>
@@ -75,7 +70,7 @@ const Cards = ({
             );
           })}
       </DealtCardsContainer>
-      {player && dealtCards.length > 0 && (
+      {!hold && player && dealtCards.length > 0 && (
         <>
           <button onClick={handleDealNewPlayerCard}>New card</button>
           <button onClick={playerHoldHandler}>Hold</button>
