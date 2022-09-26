@@ -75,20 +75,10 @@ const Player = ({
 
   useEffect(() => {
     const newScore = cards.reduce((prevVal, currentVal) => {
-      const determineScore = prevVal + currentVal.value;
-
-      if (
-        (currentVal.name.toLowerCase().includes("ace") &&
-          determineScore < 12) ||
-        (currentVal.name.toLowerCase().includes("ace") && determineScore === 21)
-      ) {
-        currentVal.value = 11;
-      } else if (
-        currentVal.name.toLowerCase().includes("ace") &&
-        determineScore > 12
-      ) {
-        console.log("test");
+      if (currentVal.name.toLowerCase().includes("ace") && score > 21) {
         currentVal.value = 1;
+      } else if (currentVal.name.toLowerCase().includes("ace")) {
+        currentVal.value = 11;
       }
       return prevVal + currentVal.value;
     }, 0);
