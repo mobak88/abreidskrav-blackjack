@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Cards from "./Cards";
+import Player from "./Player";
 import useFetch from "../hooks/useFetch";
 import generateRandomCard from "../helpers/generateRandCard";
 import styled from "styled-components";
@@ -25,7 +25,10 @@ const PlayerContainer = () => {
   const [playerCards, setPlayerCards] = useState([]);
   const [computerCards, setComputerCards] = useState([]);
   const [player, setPlayer] = useState(true);
+  const [computer, setComputer] = useState(true);
   const [hold, setHold] = useState(false);
+  const [playerScore, setPlayerScore] = useState(false);
+  const [computerScore, setComputerScore] = useState(false);
 
   const { loading, err, data } = useFetch("data/cardDeck.json");
 
@@ -35,6 +38,30 @@ const PlayerContainer = () => {
     }
   }, [data]);
 
+  const getComputerScore = (score) => {
+    setComputerScore(score);
+  };
+
+  const getPlayerScore = (score) => {
+    setPlayerScore(score);
+  };
+
+  const determineWinner = () => {
+    if (
+      (playerScore > computerScore && playerScore <= 21) ||
+      (computerScore > 21 && playerScore <= 21)
+    ) {
+      console.log("Player wins");
+    } else if (
+      (playerScore < computerScore && computerScore <= 21) ||
+      (playerScore > 21 && computerScore <= 21)
+    ) {
+      console.log("Computer wins");
+    } else {
+      console.log("Draw");
+    }
+  };
+
   const removeCardFromDeck = (i) => {
     setCardDeck((prevState) => {
       const newCardDeck = prevState.filter((card) => card !== cardDeck[i]);
@@ -43,18 +70,25 @@ const PlayerContainer = () => {
   };
 
   const dealInitialCards = () => {
-    for (let i = 0; i <= 3; i++) {
+    let cardDeckSet = new Set();
+
+    while (cardDeckSet.size < 4) {
       const randNum = generateRandomCard(cardDeck);
+      cardDeckSet.add(randNum);
+    }
 
+    cardDeckSet = [...cardDeckSet];
+
+    for (let i = 0; i <= 3; i++) {
       if (i % 2 === 0) {
-        setComputerCards((prevState) => [...prevState, cardDeck[randNum]]);
-
-        removeCardFromDeck(randNum);
+        setComputerCards((prevState) => [
+          ...prevState,
+          cardDeck[cardDeckSet[i]],
+        ]);
       } else {
-        setPlayerCards((prevState) => [...prevState, cardDeck[randNum]]);
-
-        removeCardFromDeck(randNum);
+        setPlayerCards((prevState) => [...prevState, cardDeck[cardDeckSet[i]]]);
       }
+      removeCardFromDeck(cardDeckSet[i]);
     }
   };
 
@@ -95,26 +129,39 @@ const PlayerContainer = () => {
   useEffect(() => {
     if (hold === true) {
       dealNewComputerCards();
+      determineWinner();
     }
-  }, [hold]);
+  }, [hold, computerScore]);
+
+  useEffect(() => {
+    if (playerScore === 21) {
+      console.log("Blackjack");
+    }
+  }, [playerScore]);
 
   return (
     <Container>
       {computerCards.length !== 0 && (
-        <Cards hold={hold} cards={computerCards}>
+        <Player
+          computer={computer}
+          getScore={getComputerScore}
+          hold={hold}
+          cards={computerCards}
+        >
           Computer
-        </Cards>
+        </Player>
       )}
       {playerCards.length !== 0 && (
-        <Cards
+        <Player
           cards={playerCards}
           player={player}
           dealNewPlayerCard={dealNewPlayerCard}
           handlePlayerHold={handlePlayerHold}
           hold={hold}
+          getScore={getPlayerScore}
         >
           Player
-        </Cards>
+        </Player>
       )}
 
       {cardDeck.length === 52 && (

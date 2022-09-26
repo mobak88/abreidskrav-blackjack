@@ -37,8 +37,7 @@ const GlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* background: radial-gradient(circle, rgba(0,100,0,1) 0%, rgba(40,201,59,1) 100%); */
-        background-color: #313131;
+        background-image: url('/images/pool_table.png');
     }
     /* A elements that don't have a class get default styles */
     a:not([class]) {
