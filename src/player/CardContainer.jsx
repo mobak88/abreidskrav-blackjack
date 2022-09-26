@@ -7,6 +7,7 @@ const Container = styled.div`
   align-items: center;
   gap: 2rem;
   padding: 2rem;
+  background-color: #1a1a1a5f;
 `;
 
 const CardContainer = ({ children }) => {

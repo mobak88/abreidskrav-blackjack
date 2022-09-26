@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import heart from "../../src/cardsIcons/heart-solid.svg";
+import diamond from "../../src/cardsIcons/diamond-solid.svg";
+import spade from "../../src/cardsIcons/spade.svg";
+import clover from "../../src/cardsIcons/clover-solid.svg";
 import CardContainer from "./CardContainer";
 import styled from "styled-components";
 
@@ -34,6 +38,14 @@ const Btn = styled.button`
   text-transform: uppercase;
 `;
 
+const ScoreWrapper = styled.div`
+  background-color: #fff;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Player = ({
   cards,
   children,
@@ -43,6 +55,7 @@ const Player = ({
   handlePlayerHold,
   hold,
   getScore,
+  blackJack,
 }) => {
   const [dealtCards, setDealtCards] = useState([]);
   const [score, setScore] = useState(0);
@@ -62,22 +75,42 @@ const Player = ({
 
   useEffect(() => {
     const newScore = cards.reduce((prevVal, currentVal) => {
+      if (
+        (currentVal.name.toLowerCase().includes("ace") && score < 11) ||
+        (currentVal.name.toLowerCase().includes("ace") && score === 0) ||
+        (currentVal.name.toLowerCase().includes("ace") && score === 10)
+      ) {
+        currentVal.value = 11;
+      } else if (currentVal.name.toLowerCase().includes("ace") && score > 21) {
+        currentVal.value = 1;
+      }
       return prevVal + currentVal.value;
     }, 0);
     setScore(newScore);
     getScore(newScore);
   }, [dealtCards]);
 
+  const cardImg = (card) => {
+    const cardName = card.name.split(" ")[1].toLowerCase();
+    if (cardName === "heart") return heart;
+    if (cardName === "clover") return clover;
+    if (cardName === "spade") return spade;
+    if (cardName === "diamond") return diamond;
+  };
+
   return (
     <CardContainer>
-      <h2>{children}</h2>
-      {score < 21 && <h3>Score: {score}</h3>}
-      {score > 21 && <h3>You lost Score: {score}</h3>}
-      {score === 21 && <h3>Blackjack Score: {score}</h3>}
+      <ScoreWrapper>
+        <h2>{children}</h2>
+        {score < 21 && player && <h3>Score: {score}</h3>}
+        {hold && computer && <h3>Score: {score}</h3>}
+        {score > 21 && <h3>You lost Score: {score}</h3>}
+        {score === 21 && <h3>Blackjack Score: {score}</h3>}
+      </ScoreWrapper>
       <DealtCardsContainer>
         {cards.length > 0 &&
           cards.map((card, i) => {
-            if (!hold && computer && i === 0) {
+            if (!blackJack && !hold && computer && i === 0) {
               return <HiddenCard key={card.name} />;
             }
 
@@ -85,10 +118,10 @@ const Player = ({
               return (
                 <CardWrapper key={card.name}>
                   <CardNumber>
-                    {card.value}
+                    {card.symbol}
                     <img
                       style={{ height: 53, width: 36 }}
-                      src="/images/cardsIcons/heart-solid.svg"
+                      src={cardImg(card)}
                       alt=""
                     />
                   </CardNumber>
@@ -96,59 +129,18 @@ const Player = ({
               );
             }
 
-            if (card.name.toLowerCase().includes("heart")) {
-              return (
-                <CardWrapper key={card.name}>
-                  <CardNumber>
-                    {card.value}
-                    <img
-                      style={{ height: 53, width: 36 }}
-                      src="/images/cardsIcons/heart-solid.svg"
-                      alt=""
-                    />
-                  </CardNumber>
-                </CardWrapper>
-              );
-            } else if (card.name.toLowerCase().includes("diamond")) {
-              return (
-                <CardWrapper key={card.name}>
-                  <CardNumber>
-                    {card.value}
-                    <img
-                      style={{ height: 53, width: 36 }}
-                      src="/images/cardsIcons/diamond-solid.svg"
-                      alt=""
-                    />
-                  </CardNumber>
-                </CardWrapper>
-              );
-            } else if (card.name.toLowerCase().includes("spade")) {
-              return (
-                <CardWrapper key={card.name}>
-                  <CardNumber>
-                    {card.value}
-                    <img
-                      style={{ height: 53, width: 36 }}
-                      src="/images/cardsIcons/spade.svg"
-                      alt=""
-                    />
-                  </CardNumber>
-                </CardWrapper>
-              );
-            } else {
-              return (
-                <CardWrapper key={card.name}>
-                  <CardNumber>
-                    {card.value}
-                    <img
-                      style={{ height: 53, width: 36 }}
-                      src="/images/cardsIcons/clover-solid.svg"
-                      alt=""
-                    />
-                  </CardNumber>
-                </CardWrapper>
-              );
-            }
+            return (
+              <CardWrapper key={card.name}>
+                <CardNumber>
+                  {card.symbol}
+                  <img
+                    style={{ height: 53, width: 36 }}
+                    src={cardImg(card)}
+                    alt=""
+                  />
+                </CardNumber>
+              </CardWrapper>
+            );
           })}
       </DealtCardsContainer>
       {!hold && player && dealtCards.length > 0 && score < 21 && (

@@ -8,7 +8,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
   min-height: 100vh;
+  gap: 2rem;
 `;
 
 const DealCardsBtn = styled.button`
@@ -29,6 +31,7 @@ const PlayerContainer = () => {
   const [hold, setHold] = useState(false);
   const [playerScore, setPlayerScore] = useState(false);
   const [computerScore, setComputerScore] = useState(false);
+  const [blackJack, setBlackJack] = useState(false);
 
   const { loading, err, data } = useFetch("data/cardDeck.json");
 
@@ -134,19 +137,22 @@ const PlayerContainer = () => {
   }, [hold, computerScore]);
 
   useEffect(() => {
-    if (playerScore === 21) {
+    if (playerScore === 21 || computerScore === 21) {
+      setBlackJack(true);
       console.log("Blackjack");
     }
-  }, [playerScore]);
+  }, [playerScore, computerScore]);
 
   return (
     <Container>
+      {playerCards.length === 0 && <h1>Blackjack</h1>}
       {computerCards.length !== 0 && (
         <Player
           computer={computer}
           getScore={getComputerScore}
           hold={hold}
           cards={computerCards}
+          blackJack={blackJack}
         >
           Computer
         </Player>
@@ -159,14 +165,13 @@ const PlayerContainer = () => {
           handlePlayerHold={handlePlayerHold}
           hold={hold}
           getScore={getPlayerScore}
+          blackJack={blackJack}
         >
           Player
         </Player>
       )}
 
-      {cardDeck.length === 52 && (
-        <DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>
-      )}
+      {<DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>}
     </Container>
   );
 };
