@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import heart from "../../src/cardsIcons/heart-solid.svg";
 import diamond from "../../src/cardsIcons/diamond-solid.svg";
 import spade from "../../src/cardsIcons/spade.svg";
@@ -69,19 +69,23 @@ const Player = ({
     handlePlayerHold();
   };
 
+  const determineAceValue = () => {
+    return cards.reduce((prevVal, currentVal) => {
+      if (currentVal.name.toLowerCase().includes("ace") && score < 21) {
+        currentVal.value = 11;
+      } else if (currentVal.name.toLowerCase().includes("ace") && score > 21) {
+        currentVal.value = 1;
+      }
+      return prevVal + currentVal.value;
+    }, 0);
+  };
+
   useEffect(() => {
     setDealtCards([...cards]);
   }, [cards]);
 
   useEffect(() => {
-    const newScore = cards.reduce((prevVal, currentVal) => {
-      if (currentVal.name.toLowerCase().includes("ace") && score > 21) {
-        currentVal.value = 1;
-      } else if (currentVal.name.toLowerCase().includes("ace")) {
-        currentVal.value = 11;
-      }
-      return prevVal + currentVal.value;
-    }, 0);
+    const newScore = determineAceValue();
     setScore(newScore);
     getScore(newScore);
   }, [dealtCards]);
@@ -140,7 +144,7 @@ const Player = ({
             );
           })}
       </DealtCardsContainer>
-      {!hold && player && dealtCards.length > 0 && score < 21 && (
+      {!blackJack && !hold && player && dealtCards.length > 0 && score < 21 && (
         <>
           <Btn onClick={handleDealNewPlayerCard}>New card</Btn>
           <Btn onClick={playerHoldHandler}>Hold</Btn>

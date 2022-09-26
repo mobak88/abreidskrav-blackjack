@@ -138,21 +138,44 @@ const PlayerContainer = () => {
     }
   }, [hold, computerScore]);
 
-  useEffect(() => {
-    if (playerScore > 21) {
-      setWinner("You got busted computer wins");
-      setBlackJack(true);
+  const blackJackWinner = () => {
+    if (playerScore === 21 && computerScore === 21) {
+      setWinner("Both you and computer got BlackJack draw");
     }
+
     if (playerScore === 21 || computerScore === 21) {
       setBlackJack(true);
       if (playerScore === 21) {
         setWinner("You got BlackJack congratulations you win");
+        setBlackJack(true);
       } else if (computerScore === 21) {
-        setWinner("Computer got BlackJack");
-      } else {
-        setWinner("Both you and computer got BlackJack draw");
+        setWinner("Computer got BlackJack you lose");
+        setBlackJack(true);
       }
     }
+  };
+
+  const busted = () => {
+    if (playerScore > 21) {
+      setWinner("You got busted computer wins");
+      setBlackJack(true);
+    }
+
+    if (computerScore > 21) {
+      setWinner("Computer got busted you win");
+      setBlackJack(true);
+    }
+
+    if (playerScore < 21 && computerScore < 21 && blackJack === true) {
+      setWinner("");
+      setBlackJack(false);
+    }
+  };
+
+  useEffect(() => {
+    blackJackWinner();
+
+    busted();
   }, [playerScore, computerScore]);
 
   const refreshPage = () => {
