@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import heart from "../../src/cardsIcons/heart-solid.svg";
 import diamond from "../../src/cardsIcons/diamond-solid.svg";
 import spade from "../../src/cardsIcons/spade.svg";

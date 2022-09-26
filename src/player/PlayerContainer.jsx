@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Player from "./Player";
 import useFetch from "../hooks/useFetch";
 import generateRandomCard from "../helpers/generateRandCard";
+import determineWinner from "../helpers/determineWinner";
+import blackJackWinner from "../helpers/blackJackWinner";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -30,8 +32,8 @@ const PlayerContainer = () => {
   const [player, setPlayer] = useState(true);
   const [computer, setComputer] = useState(true);
   const [hold, setHold] = useState(false);
-  const [playerScore, setPlayerScore] = useState(false);
-  const [computerScore, setComputerScore] = useState(false);
+  const [playerScore, setPlayerScore] = useState(null);
+  const [computerScore, setComputerScore] = useState(null);
   const [blackJack, setBlackJack] = useState(false);
   const [winner, setWinner] = useState("");
 
@@ -49,22 +51,6 @@ const PlayerContainer = () => {
 
   const getPlayerScore = (score) => {
     setPlayerScore(score);
-  };
-
-  const determineWinner = () => {
-    if (
-      (playerScore > computerScore && playerScore <= 21) ||
-      (computerScore > 21 && playerScore <= 21)
-    ) {
-      setWinner("You won");
-    } else if (
-      (playerScore < computerScore && computerScore <= 21) ||
-      (playerScore > 21 && computerScore <= 21)
-    ) {
-      setWinner("Computer won");
-    } else {
-      setWinner("Draw");
-    }
   };
 
   const removeCardFromDeck = (i) => {
@@ -131,30 +117,6 @@ const PlayerContainer = () => {
     }
   };
 
-  useEffect(() => {
-    if (hold === true) {
-      dealNewComputerCards();
-      determineWinner();
-    }
-  }, [hold, computerScore]);
-
-  const blackJackWinner = () => {
-    if (playerScore === 21 && computerScore === 21) {
-      setWinner("Both you and computer got BlackJack draw");
-    }
-
-    if (playerScore === 21 || computerScore === 21) {
-      setBlackJack(true);
-      if (playerScore === 21) {
-        setWinner("You got BlackJack congratulations you win");
-        setBlackJack(true);
-      } else if (computerScore === 21) {
-        setWinner("Computer got BlackJack you lose");
-        setBlackJack(true);
-      }
-    }
-  };
-
   const busted = () => {
     if (playerScore > 21) {
       setWinner("You got busted computer wins");
@@ -173,7 +135,23 @@ const PlayerContainer = () => {
   };
 
   useEffect(() => {
-    blackJackWinner();
+    if (hold === true) {
+      dealNewComputerCards();
+      const winnerString = determineWinner(playerScore, computerScore);
+      setWinner(winnerString);
+      setBlackJack(false);
+      busted();
+    }
+  }, [hold, computerScore, playerScore, winner]);
+
+  useEffect(() => {
+    const [blackJackString, gotBlackJack] = blackJackWinner(
+      playerScore,
+      computerScore
+    );
+
+    setWinner(blackJackString);
+    setBlackJack(gotBlackJack);
 
     busted();
   }, [playerScore, computerScore]);
