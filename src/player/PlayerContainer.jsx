@@ -155,6 +155,10 @@ const PlayerContainer = () => {
     }
   }, [playerScore, computerScore]);
 
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   return (
     <Container>
       {playerCards.length === 0 && <h1>Blackjack</h1>}
@@ -186,6 +190,9 @@ const PlayerContainer = () => {
 
       {cardDeck.length === 52 && (
         <DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>
+      )}
+      {(blackJack || hold) && (
+        <DealCardsBtn onClick={refreshPage}>Start New Game</DealCardsBtn>
       )}
     </Container>
   );

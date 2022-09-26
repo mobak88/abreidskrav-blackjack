@@ -75,13 +75,19 @@ const Player = ({
 
   useEffect(() => {
     const newScore = cards.reduce((prevVal, currentVal) => {
+      const determineScore = prevVal + currentVal.value;
+
       if (
-        (currentVal.name.toLowerCase().includes("ace") && score < 11) ||
-        (currentVal.name.toLowerCase().includes("ace") && score === 0) ||
-        (currentVal.name.toLowerCase().includes("ace") && score === 10)
+        (currentVal.name.toLowerCase().includes("ace") &&
+          determineScore < 12) ||
+        (currentVal.name.toLowerCase().includes("ace") && determineScore === 21)
       ) {
         currentVal.value = 11;
-      } else if (currentVal.name.toLowerCase().includes("ace") && score > 21) {
+      } else if (
+        currentVal.name.toLowerCase().includes("ace") &&
+        determineScore > 12
+      ) {
+        console.log("test");
         currentVal.value = 1;
       }
       return prevVal + currentVal.value;
@@ -103,10 +109,10 @@ const Player = ({
       <ScoreWrapper>
         <h2>{children}</h2>
         {score < 21 && player && <h3>Score: {score}</h3>}
-        {hold && computer && <h3>Score: {score}</h3>}
+        {!blackJack && hold && computer && <h3>Score: {score}</h3>}
         {blackJack && computer && <h3>Score: {score}</h3>}
-        {score > 21 && <h3>You lost Score: {score}</h3>}
-        {score === 21 && <h3>Blackjack Score: {score}</h3>}
+        {player && score > 21 && <h3>You lost Score: {score}</h3>}
+        {player && score === 21 && <h3>Blackjack Score: {score}</h3>}
       </ScoreWrapper>
       <DealtCardsContainer>
         {cards.length > 0 &&
