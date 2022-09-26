@@ -104,6 +104,7 @@ const Player = ({
         <h2>{children}</h2>
         {score < 21 && player && <h3>Score: {score}</h3>}
         {hold && computer && <h3>Score: {score}</h3>}
+        {blackJack && computer && <h3>Score: {score}</h3>}
         {score > 21 && <h3>You lost Score: {score}</h3>}
         {score === 21 && <h3>Blackjack Score: {score}</h3>}
       </ScoreWrapper>

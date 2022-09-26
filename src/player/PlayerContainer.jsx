@@ -11,6 +11,7 @@ const Container = styled.div`
   align-items: center;
   min-height: 100vh;
   gap: 2rem;
+  padding: 3rem 0;
 `;
 
 const DealCardsBtn = styled.button`
@@ -32,6 +33,7 @@ const PlayerContainer = () => {
   const [playerScore, setPlayerScore] = useState(false);
   const [computerScore, setComputerScore] = useState(false);
   const [blackJack, setBlackJack] = useState(false);
+  const [winner, setWinner] = useState("");
 
   const { loading, err, data } = useFetch("data/cardDeck.json");
 
@@ -54,14 +56,14 @@ const PlayerContainer = () => {
       (playerScore > computerScore && playerScore <= 21) ||
       (computerScore > 21 && playerScore <= 21)
     ) {
-      console.log("Player wins");
+      setWinner("You won");
     } else if (
       (playerScore < computerScore && computerScore <= 21) ||
       (playerScore > 21 && computerScore <= 21)
     ) {
-      console.log("Computer wins");
+      setWinner("Computer won");
     } else {
-      console.log("Draw");
+      setWinner("Draw");
     }
   };
 
@@ -137,9 +139,19 @@ const PlayerContainer = () => {
   }, [hold, computerScore]);
 
   useEffect(() => {
+    if (playerScore > 21) {
+      setWinner("You got busted computer wins");
+      setBlackJack(true);
+    }
     if (playerScore === 21 || computerScore === 21) {
       setBlackJack(true);
-      console.log("Blackjack");
+      if (playerScore === 21) {
+        setWinner("You got BlackJack congratulations you win");
+      } else if (computerScore === 21) {
+        setWinner("Computer got BlackJack");
+      } else {
+        setWinner("Both you and computer got BlackJack draw");
+      }
     }
   }, [playerScore, computerScore]);
 
@@ -157,6 +169,7 @@ const PlayerContainer = () => {
           Computer
         </Player>
       )}
+      {winner && <h1>{winner}</h1>}
       {playerCards.length !== 0 && (
         <Player
           cards={playerCards}
@@ -171,7 +184,9 @@ const PlayerContainer = () => {
         </Player>
       )}
 
-      {<DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>}
+      {cardDeck.length === 52 && (
+        <DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>
+      )}
     </Container>
   );
 };
