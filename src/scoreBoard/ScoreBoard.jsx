@@ -17,11 +17,18 @@ const ScoreBoard = ({ score }) => {
   const [showScoreBoard, setShowScoreBoard] = useState(false);
   const [showSubmitScore, setShowSubmitScore] = useState(false);
 
+  const handleShowScoreBoard = () => {
+    setShowScoreBoard((prevState) => !prevState);
+  };
+
   return (
     <>
       {showScoreBoard && <ScoreTable />}
       {showSubmitScore && (
-        <SubmitHighScore score={score} getPlayerDetails={getPlayerDetails} />
+        <SubmitHighScore
+          score={score}
+          handleShowScoreBoard={handleShowScoreBoard}
+        />
       )}
       <BtnWrapper>
         {!showScoreBoard && (

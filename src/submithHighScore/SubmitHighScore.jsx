@@ -20,7 +20,7 @@ const FormLabel = styled.label`
   font-size: 1.2rem;
 `;
 
-const SubmitHighScore = ({ score }) => {
+const SubmitHighScore = ({ score, handleShowScoreBoard }) => {
   const [playerName, setPlayerName] = useState("");
   const [localStoragePlayers, setLocalStoragePlayers] = useState(
     JSON.parse(localStorage.getItem("scores")) || []
@@ -32,6 +32,7 @@ const SubmitHighScore = ({ score }) => {
       ...prevState,
       { name: playerName, score: score },
     ]);
+    handleShowScoreBoard();
   };
 
   const onNameChange = (e) => {

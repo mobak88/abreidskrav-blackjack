@@ -39,6 +39,10 @@ const ScoreTable = () => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(localStoragePlayers);
+  }, [localStoragePlayers]);
+
   return (
     <Table>
       <thead>
