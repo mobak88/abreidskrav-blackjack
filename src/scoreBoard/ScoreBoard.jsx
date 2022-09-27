@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../button/Button";
+import ScoreTable from "./ScoreTable";
+import SubmitHighScore from "../submithHighScore/SubmitHighScore";
 import styled from "styled-components";
 
 const BtnWrapper = styled.div`
@@ -11,62 +13,16 @@ const Btn = styled(Button)`
   background-color: #0a0a0a;
 `;
 
-const ScoreTable = styled.table`
-  background-color: #fff;
-  border-collapse: collapse;
-  min-width: 18rem;
-`;
-
-const SroreTr = styled.tr`
-  &:nth-child(odd) {
-    background-color: #dddddd;
-  }
-`;
-
-const ScoreTd = styled.td`
-  font-size: 1.4rem;
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 0.8rem;
-`;
-
-const ScoreTh = styled.th`
-  font-size: 1.4rem;
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 0.8rem;
-`;
-
-const ScoreBoard = () => {
+const ScoreBoard = ({ score }) => {
   const [showScoreBoard, setShowScoreBoard] = useState(false);
+  const [showSubmitScore, setShowSubmitScore] = useState(false);
 
   return (
     <>
-      {showScoreBoard && (
-        <ScoreTable>
-          <thead>
-            <tr>
-              <ScoreTh>Name</ScoreTh>
-              <ScoreTh>Score</ScoreTh>
-            </tr>
-          </thead>
-          <tbody>
-            <SroreTr>
-              <ScoreTd>Mo</ScoreTd>
-              <ScoreTd>20</ScoreTd>
-            </SroreTr>
-            <SroreTr>
-              <ScoreTd>Mo</ScoreTd>
-              <ScoreTd>20</ScoreTd>
-            </SroreTr>
-            <SroreTr>
-              <ScoreTd>Mo</ScoreTd>
-              <ScoreTd>20</ScoreTd>
-            </SroreTr>
-          </tbody>
-        </ScoreTable>
+      {showScoreBoard && <ScoreTable />}
+      {showSubmitScore && (
+        <SubmitHighScore score={score} getPlayerDetails={getPlayerDetails} />
       )}
-
       <BtnWrapper>
         {!showScoreBoard && (
           <Btn onClick={() => setShowScoreBoard((prevState) => !prevState)}>
@@ -78,7 +34,16 @@ const ScoreBoard = () => {
             Hide high score
           </Btn>
         )}
-        <Btn>Submit highscore</Btn>
+        {!showSubmitScore && (
+          <Btn onClick={() => setShowSubmitScore((prevState) => !prevState)}>
+            Submit highscore
+          </Btn>
+        )}
+        {showSubmitScore && (
+          <Btn onClick={() => setShowSubmitScore((prevState) => !prevState)}>
+            Hide sumbit highscore
+          </Btn>
+        )}
       </BtnWrapper>
     </>
   );
