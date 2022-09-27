@@ -4,25 +4,18 @@ import useFetch from "../hooks/useFetch";
 import generateRandomCard from "../helpers/generateRandCard";
 import determineWinner from "../helpers/determineWinner";
 import blackJackWinner from "../helpers/blackJackWinner";
+import ScoreBoard from "../scoreBoard/ScoreBoard";
+import Button from "../button/Button";
 import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
   gap: 2rem;
   padding: 3rem 0;
-`;
-
-const DealCardsBtn = styled.button`
-  padding: 1rem 2rem;
-  background-color: #030357;
-  border: none;
-  color: #cfcfcf;
-  font-weight: 600;
-  text-transform: uppercase;
 `;
 
 const PlayerContainer = () => {
@@ -162,8 +155,8 @@ const PlayerContainer = () => {
 
   return (
     <Container>
-      {playerCards.length === 0 && <h1>Blackjack</h1>}
-      {computerCards.length !== 0 && (
+      {cardDeck.length === 52 && <h1>Play Blackjack</h1>}
+      {cardDeck.length !== 52 && (
         <Player
           computer={computer}
           getScore={getComputerScore}
@@ -175,7 +168,7 @@ const PlayerContainer = () => {
         </Player>
       )}
       {winner && <h1>{winner}</h1>}
-      {playerCards.length !== 0 && (
+      {cardDeck.length !== 52 && (
         <Player
           cards={playerCards}
           player={player}
@@ -190,10 +183,13 @@ const PlayerContainer = () => {
       )}
 
       {cardDeck.length === 52 && (
-        <DealCardsBtn onClick={dealInitialCards}>Deal cards</DealCardsBtn>
+        <Button onClick={dealInitialCards}>Deal cards</Button>
       )}
       {(blackJack || hold) && (
-        <DealCardsBtn onClick={refreshPage}>Start New Game</DealCardsBtn>
+        <>
+          <Button onClick={refreshPage}>Start New Game</Button>
+          <ScoreBoard />
+        </>
       )}
     </Container>
   );

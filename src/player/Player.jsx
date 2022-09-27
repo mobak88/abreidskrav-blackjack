@@ -4,6 +4,7 @@ import diamond from "../../src/cardsIcons/diamond-solid.svg";
 import spade from "../../src/cardsIcons/spade.svg";
 import clover from "../../src/cardsIcons/clover-solid.svg";
 import CardContainer from "./CardContainer";
+import Button from "../button/Button";
 import styled from "styled-components";
 
 const DealtCardsContainer = styled.div`
@@ -27,15 +28,6 @@ const HiddenCard = styled.div`
 const CardNumber = styled.p`
   font-size: 2rem;
   text-align: center;
-`;
-
-const Btn = styled.button`
-  padding: 1rem 2rem;
-  background-color: #030357;
-  border: none;
-  color: #cfcfcf;
-  font-weight: 600;
-  text-transform: uppercase;
 `;
 
 const ScoreWrapper = styled.div`
@@ -146,8 +138,8 @@ const Player = ({
       </DealtCardsContainer>
       {!blackJack && !hold && player && dealtCards.length > 0 && score < 21 && (
         <>
-          <Btn onClick={handleDealNewPlayerCard}>New card</Btn>
-          <Btn onClick={playerHoldHandler}>Hold</Btn>
+          <Button onClick={handleDealNewPlayerCard}>New card</Button>
+          <Button onClick={playerHoldHandler}>Hold</Button>
         </>
       )}
     </CardContainer>
