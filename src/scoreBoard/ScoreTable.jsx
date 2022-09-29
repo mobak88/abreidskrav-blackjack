@@ -33,28 +33,34 @@ const ScoreTable = () => {
   );
 
   useEffect(() => {
-    const data = localStorage.getItem("scores");
+    const data = JSON.parse(localStorage.getItem("scores"));
+    const sortedData = data.sort((a, b) => {
+      return b.score - a.score;
+    });
+
     if (data !== null) {
-      setLocalStoragePlayers(JSON.parse(data));
+      setLocalStoragePlayers(sortedData);
     }
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log(localStoragePlayers);
-  }, [localStoragePlayers]);
+  }, [localStoragePlayers]); */
 
   return (
     <Table>
       <thead>
         <tr>
+          <ScoreTh>Place</ScoreTh>
           <ScoreTh>Name</ScoreTh>
           <ScoreTh>Score</ScoreTh>
         </tr>
       </thead>
       <tbody>
-        {localStoragePlayers.map((player) => {
+        {localStoragePlayers.map((player, i) => {
           return (
             <SroreTr key={player.name + Math.random()}>
+              <ScoreTd>{`${i + 1}.`}</ScoreTd>
               <ScoreTd>{player.name}</ScoreTd>
               <ScoreTd>{player.score}</ScoreTd>
             </SroreTr>

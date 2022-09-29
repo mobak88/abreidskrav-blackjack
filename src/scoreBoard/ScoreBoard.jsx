@@ -16,9 +16,14 @@ const Btn = styled(Button)`
 const ScoreBoard = ({ score }) => {
   const [showScoreBoard, setShowScoreBoard] = useState(false);
   const [showSubmitScore, setShowSubmitScore] = useState(false);
+  const [submittedScore, setSubmittedScore] = useState(false);
 
-  const handleShowScoreBoard = () => {
-    setShowScoreBoard((prevState) => !prevState);
+  const handleSubmittedHighSCore = () => {
+    if (showScoreBoard === false) {
+      setShowScoreBoard((prevState) => !prevState);
+      setShowSubmitScore((prevState) => !prevState);
+      setSubmittedScore((prevState) => !prevState);
+    }
   };
 
   return (
@@ -27,7 +32,7 @@ const ScoreBoard = ({ score }) => {
       {showSubmitScore && (
         <SubmitHighScore
           score={score}
-          handleShowScoreBoard={handleShowScoreBoard}
+          handleSubmittedHighSCore={handleSubmittedHighSCore}
         />
       )}
       <BtnWrapper>
@@ -41,7 +46,7 @@ const ScoreBoard = ({ score }) => {
             Hide high score
           </Btn>
         )}
-        {!showSubmitScore && (
+        {!showSubmitScore && !submittedScore && (
           <Btn onClick={() => setShowSubmitScore((prevState) => !prevState)}>
             Submit highscore
           </Btn>
