@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../button/Button";
 import styled from "styled-components";
 
@@ -28,45 +28,44 @@ const SubmitHighScore = ({
   const [playerName, setPlayerName] = useState("");
   const [lowestScore, setLowestScore] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
+  const [submittedScore, setSubmittedScore] = useState(false);
   const [localStoragePlayers, setLocalStoragePlayers] = useState(
     JSON.parse(localStorage.getItem("scores")) || []
   );
 
-  const prevLocalStoragePlayersRef = useRef(localStoragePlayers);
-
   const onSubmitScore = (e) => {
-    console.log("Score");
     e.preventDefault();
 
-    if (localStoragePlayers.length < 5 && score < 22 && score > computerScore) {
-      console.log("5");
+    if (playerName.length < 3) {
+      setErrMsg("Please type in 3 chars or more");
+      return;
+    } else if (
+      (localStoragePlayers.length < 10 &&
+        score < 22 &&
+        score > computerScore) ||
+      (localStoragePlayers.length < 10 && computerScore > 21)
+    ) {
+      setSubmittedScore(true);
       setLocalStoragePlayers((prevState) => {
         return [...prevState, { name: playerName, score: score }];
       });
-
-      prevLocalStoragePlayersRef.current = localStoragePlayers;
-      return;
     } else if (
       (score > lowestScore[0].score &&
-        localStoragePlayers.length > 4 &&
+        localStoragePlayers.length > 9 &&
         score < 22 &&
         score > computerScore) ||
       (computerScore > 21 &&
         score < 22 &&
         score > lowestScore[0].score &&
-        localStoragePlayers.length > 4)
+        localStoragePlayers.length > 9)
     ) {
-      console.log("Remove");
-      setLocalStoragePlayers((prevState) => {
-        prevState.splice(-1);
-        return [...prevState, { name: playerName, score: score }];
-      });
-
-      prevLocalStoragePlayersRef.current = localStoragePlayers;
-      return;
+      setSubmittedScore(true);
+      const newHighScoreArr = localStoragePlayers.slice(0, -1);
+      setLocalStoragePlayers([
+        ...newHighScoreArr,
+        { name: playerName, score: score },
+      ]);
     } else {
-      console.log(score, lowestScore[0].score);
-      console.log(score > lowestScore[0].score);
       setErrMsg(
         "You did not win or your score are not higher than the lowest high score"
       );
@@ -83,9 +82,6 @@ const SubmitHighScore = ({
 
     if (data !== null && data !== undefined) {
       setLocalStoragePlayers(JSON.parse(data));
-
-      const lowest = localStoragePlayers.slice(-1);
-      setLowestScore(lowest);
     }
   }, []);
 
@@ -96,20 +92,20 @@ const SubmitHighScore = ({
 
     localStorage.setItem("scores", JSON.stringify(sortedScores));
 
-    if (
-      localStoragePlayers.length > prevLocalStoragePlayersRef.current.length
-    ) {
-      console.log("Higher");
-      handleSubmittedHighSCore();
-    }
+    const lowest = localStoragePlayers.slice(-1);
+    setLowestScore(lowest);
   }, [localStoragePlayers]);
+
+  useEffect(() => {
+    handleSubmittedHighSCore();
+  }, [submittedScore]);
 
   return (
     <HighScoreForm>
       <h3>Submit yor high score</h3>
       <FormInputWrapper>
         <FormLabel htmlFor="name">Your Name:</FormLabel>
-        <input onChange={onNameChange} type="text" id="name" />
+        <input onChange={onNameChange} type="text" id="name" minLength={3} />
       </FormInputWrapper>
       <p>{errMsg}</p>
       <Button onClick={onSubmitScore}>Submit Score</Button>
