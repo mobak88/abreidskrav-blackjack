@@ -24,6 +24,7 @@ const ScoreBoard = ({ score, computerScore }) => {
     }
     setShowSubmitScore((prevState) => !prevState);
     setSubmittedScore((prevState) => !prevState);
+    console.log(submittedScore);
   };
 
   return (
