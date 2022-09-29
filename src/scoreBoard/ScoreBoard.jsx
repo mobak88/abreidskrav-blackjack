@@ -3,6 +3,7 @@ import Button from "../button/Button";
 import ScoreTable from "./ScoreTable";
 import SubmitHighScore from "../submithHighScore/SubmitHighScore";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 const BtnWrapper = styled.div`
   display: flex;
@@ -22,9 +23,8 @@ const ScoreBoard = ({ score, computerScore }) => {
     if (showScoreBoard === false) {
       setShowScoreBoard((prevState) => !prevState);
     }
-    setShowSubmitScore((prevState) => !prevState);
+    setShowSubmitScore(true);
     setSubmittedScore((prevState) => !prevState);
-    console.log(submittedScore, showSubmitScore);
   };
 
   return (
@@ -48,7 +48,7 @@ const ScoreBoard = ({ score, computerScore }) => {
             Hide high score
           </Btn>
         )}
-        {!showSubmitScore && !submittedScore && (
+        {!submittedScore && !showSubmitScore && (
           <Btn onClick={() => setShowSubmitScore((prevState) => !prevState)}>
             Submit highscore
           </Btn>
