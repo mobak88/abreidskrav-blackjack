@@ -20,9 +20,14 @@ const FormLabel = styled.label`
   font-size: 1.2rem;
 `;
 
-const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
+const SubmitHighScore = ({
+  score,
+  computerScore,
+  handleSubmittedHighSCore,
+}) => {
   const [playerName, setPlayerName] = useState("");
   const [lowestScore, setLowestScore] = useState(null);
+  const [errMsg, setErrMsg] = useState(null);
   const [localStoragePlayers, setLocalStoragePlayers] = useState(
     JSON.parse(localStorage.getItem("scores")) || []
   );
@@ -33,7 +38,7 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
     console.log("Score");
     e.preventDefault();
 
-    if (localStoragePlayers.length < 5) {
+    if (localStoragePlayers.length < 5 && score < 22 && score > computerScore) {
       console.log("5");
       setLocalStoragePlayers((prevState) => {
         return [...prevState, { name: playerName, score: score }];
@@ -41,11 +46,20 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
 
       prevLocalStoragePlayersRef.current = localStoragePlayers;
       return;
-    } else if (score > lowestScore[0].score && localStoragePlayers.length > 4) {
+    } else if (
+      (score > lowestScore[0].score &&
+        localStoragePlayers.length > 4 &&
+        score < 22 &&
+        score > computerScore) ||
+      (computerScore > 21 &&
+        score < 22 &&
+        score > lowestScore[0].score &&
+        localStoragePlayers.length > 4)
+    ) {
       console.log("Remove");
       setLocalStoragePlayers((prevState) => {
-        const removedLowest = prevState.slice(-1);
-        return [...removedLowest, { name: playerName, score: score }];
+        prevState.splice(-1);
+        return [...prevState, { name: playerName, score: score }];
       });
 
       prevLocalStoragePlayersRef.current = localStoragePlayers;
@@ -53,6 +67,9 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
     } else {
       console.log(score, lowestScore[0].score);
       console.log(score > lowestScore[0].score);
+      setErrMsg(
+        "You did not win or your score are not higher than the lowest high score"
+      );
       return;
     }
   };
@@ -82,6 +99,7 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
     if (
       localStoragePlayers.length > prevLocalStoragePlayersRef.current.length
     ) {
+      console.log("Higher");
       handleSubmittedHighSCore();
     }
   }, [localStoragePlayers]);
@@ -93,6 +111,7 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
         <FormLabel htmlFor="name">Your Name:</FormLabel>
         <input onChange={onNameChange} type="text" id="name" />
       </FormInputWrapper>
+      <p>{errMsg}</p>
       <Button onClick={onSubmitScore}>Submit Score</Button>
     </HighScoreForm>
   );

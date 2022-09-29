@@ -188,7 +188,7 @@ const PlayerContainer = () => {
       {(blackJack || hold) && (
         <>
           <Button onClick={refreshPage}>Start New Game</Button>
-          <ScoreBoard score={playerScore} />
+          <ScoreBoard computerScore={computerScore} score={playerScore} />
         </>
       )}
     </Container>

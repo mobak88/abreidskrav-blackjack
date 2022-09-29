@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "../button/Button";
 import ScoreTable from "./ScoreTable";
 import SubmitHighScore from "../submithHighScore/SubmitHighScore";
@@ -13,7 +13,7 @@ const Btn = styled(Button)`
   background-color: #0a0a0a;
 `;
 
-const ScoreBoard = ({ score }) => {
+const ScoreBoard = ({ score, computerScore }) => {
   const [showScoreBoard, setShowScoreBoard] = useState(false);
   const [showSubmitScore, setShowSubmitScore] = useState(false);
   const [submittedScore, setSubmittedScore] = useState(false);
@@ -32,6 +32,7 @@ const ScoreBoard = ({ score }) => {
       {showSubmitScore && (
         <SubmitHighScore
           score={score}
+          computerScore={computerScore}
           handleSubmittedHighSCore={handleSubmittedHighSCore}
         />
       )}
