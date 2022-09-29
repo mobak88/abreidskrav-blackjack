@@ -21,9 +21,9 @@ const ScoreBoard = ({ score }) => {
   const handleSubmittedHighSCore = () => {
     if (showScoreBoard === false) {
       setShowScoreBoard((prevState) => !prevState);
-      setShowSubmitScore((prevState) => !prevState);
-      setSubmittedScore((prevState) => !prevState);
     }
+    setShowSubmitScore((prevState) => !prevState);
+    setSubmittedScore((prevState) => !prevState);
   };
 
   return (

@@ -34,12 +34,12 @@ const ScoreTable = () => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("scores"));
-    const sortedData = data.sort((a, b) => {
+    /* const sortedData = data.sort((a, b) => {
       return b.score - a.score;
-    });
+    }); */
 
     if (data !== null) {
-      setLocalStoragePlayers(sortedData);
+      setLocalStoragePlayers(data);
     }
   }, []);
 

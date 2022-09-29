@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "../button/Button";
 import styled from "styled-components";
 
@@ -22,17 +22,39 @@ const FormLabel = styled.label`
 
 const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
   const [playerName, setPlayerName] = useState("");
+  const [lowestScore, setLowestScore] = useState(null);
   const [localStoragePlayers, setLocalStoragePlayers] = useState(
     JSON.parse(localStorage.getItem("scores")) || []
   );
 
+  const prevLocalStoragePlayersRef = useRef(localStoragePlayers);
+
   const onSubmitScore = (e) => {
+    console.log("Score");
     e.preventDefault();
-    setLocalStoragePlayers((prevState) => [
-      ...prevState,
-      { name: playerName, score: score },
-    ]);
-    handleSubmittedHighSCore();
+
+    if (localStoragePlayers.length < 5) {
+      console.log("5");
+      setLocalStoragePlayers((prevState) => {
+        return [...prevState, { name: playerName, score: score }];
+      });
+
+      prevLocalStoragePlayersRef.current = localStoragePlayers;
+      return;
+    } else if (score > lowestScore[0].score && localStoragePlayers.length > 4) {
+      console.log("Remove");
+      setLocalStoragePlayers((prevState) => {
+        const removedLowest = prevState.slice(-1);
+        return [...removedLowest, { name: playerName, score: score }];
+      });
+
+      prevLocalStoragePlayersRef.current = localStoragePlayers;
+      return;
+    } else {
+      console.log(score, lowestScore[0].score);
+      console.log(score > lowestScore[0].score);
+      return;
+    }
   };
 
   const onNameChange = (e) => {
@@ -41,14 +63,26 @@ const SubmitHighScore = ({ score, handleSubmittedHighSCore }) => {
 
   useEffect(() => {
     const data = localStorage.getItem("scores");
-    if (data !== null) {
+
+    if (data !== null && data !== undefined) {
       setLocalStoragePlayers(JSON.parse(data));
+
+      const lowest = localStoragePlayers.slice(-1);
+      setLowestScore(lowest);
     }
   }, []);
 
   useEffect(() => {
-    if (localStoragePlayers.length > 0 || localStoragePlayers !== null) {
-      localStorage.setItem("scores", JSON.stringify(localStoragePlayers));
+    const sortedScores = localStoragePlayers.sort((a, b) => {
+      return b.score - a.score;
+    });
+
+    localStorage.setItem("scores", JSON.stringify(sortedScores));
+
+    if (
+      localStoragePlayers.length > prevLocalStoragePlayersRef.current.length
+    ) {
+      handleSubmittedHighSCore();
     }
   }, [localStoragePlayers]);
 
