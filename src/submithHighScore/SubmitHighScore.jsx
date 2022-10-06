@@ -45,10 +45,11 @@ const SubmitHighScore = ({
         score > computerScore) ||
       (localStoragePlayers.length < 10 && computerScore > 21)
     ) {
-      setSubmittedScore(true);
+      console.log("Under 10");
       setLocalStoragePlayers((prevState) => {
         return [...prevState, { name: playerName, score: score }];
       });
+      setSubmittedScore((prevState) => !prevState);
     } else if (
       (score > lowestScore[0].score &&
         localStoragePlayers.length > 9 &&
@@ -59,12 +60,12 @@ const SubmitHighScore = ({
         score > lowestScore[0].score &&
         localStoragePlayers.length > 9)
     ) {
-      setSubmittedScore(true);
       const newHighScoreArr = localStoragePlayers.slice(0, -1);
       setLocalStoragePlayers([
         ...newHighScoreArr,
         { name: playerName, score: score },
       ]);
+      setSubmittedScore((prevState) => !prevState);
     } else {
       setErrMsg(
         "You did not win or your score are not higher than the lowest high score"
@@ -97,7 +98,7 @@ const SubmitHighScore = ({
   }, [localStoragePlayers]);
 
   useEffect(() => {
-    handleSubmittedHighSCore();
+    if (submittedScore) handleSubmittedHighSCore();
   }, [submittedScore]);
 
   return (
